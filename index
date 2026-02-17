@@ -1,0 +1,1191 @@
+<head>
+    <title>嫩芽</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Noto+Serif+SC:wght@400;600&family=ZCOOL+XiaoWei&family=ZCOOL+KuaiLe&family=Share+Tech+Mono&family=Press+Start+2P&display=swap');
+
+        :root {
+            /* 1. 核心布局与尺寸变量 */
+            --card-max-width: 488px;
+            --section-gap: 1.5rem;
+            --base-font-size: 16px;
+            --avatar-size: 60px;
+            --power-ring-size: 100px;
+            --craving-ring-size: 100px;
+            --people-panel-max-width: 650px;
+            --settings-panel-max-width: 600px;
+            --doc-panel-max-width: 550px;
+
+            /* 2. 核心颜色与主题变量 */
+            --font-main: 'Poppins', sans-serif;
+            --font-tech: 'Share Tech Mono', monospace;
+            --bg-body: #eef5f2;
+            --bg-card: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(230,250,230,0.95));
+            --bg-content: rgba(255, 255, 255, 0.9);
+            --bg-ring: #eafaf1;
+            --bg-task: #f5fcf5;
+            --bg-quote: #f0f7f2;
+            --bg-task-hover: #e8f5e9;
+            --color-primary: #2ecc71;
+            --color-accent-glow: #00ff7f;
+            --color-text-dark: #2c3e50;
+            --color-text-light: #5a6a7a;
+            --color-border: rgba(46, 204, 113, 0.5);
+            --color-reward: #f39c12;
+            --color-grade-s: #e74c3c;
+            --color-grade-a: #f39c12;
+            --color-grade-b: #3498db;
+            --color-grade-c: #2ecc71;
+            --bg-table-header: #f8f9fa;
+
+            /* 新增变量 */
+            --color-delete: #ff6b6b;
+            --bg-body-state: #e3f2fd;
+            --color-body-state: #1976d2;
+
+            /* Chaos UI 变量 */
+            --chaos-grid-bg: radial-gradient(circle, rgba(46,204,113,0.1) 1px, transparent 1px);
+            --chaos-text-shadow: 2px 0 rgba(255,0,0,0.2), -2px 0 rgba(0,0,255,0.2);
+        }
+
+        /* 3. 基础与重置样式 */
+        html { font-size: var(--base-font-size); }
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-body);
+            margin: 0; padding: 1rem; display: flex;
+            justify-content: center; align-items: center;
+            min-height: 100vh; box-sizing: border-box; font-size: 1rem;
+            transform: translateZ(0); backface-visibility: hidden; perspective: 1000;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background-color: rgba(46, 204, 113, 0.5); border-radius: 10px; transition: background-color 0.2s; }
+        ::-webkit-scrollbar-thumb:hover { background-color: rgba(46, 204, 113, 0.8); }
+
+        /* 4. 主卡片容器样式 */
+        .status-card {
+            background: var(--bg-card); border: 1px solid var(--color-border);
+            border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative; overflow: hidden; width: 100%; max-width: var(--card-max-width);
+            margin: 20px auto; box-sizing: border-box; transition: max-width 0.3s ease;
+            transform: translateZ(0); will-change: transform;
+        }
+        .status-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(transparent, var(--color-accent-glow), transparent 30%);
+            animation: rotate 5s linear infinite;
+        }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .card-content {
+            background: var(--bg-content); border-radius: 18px;
+            padding: 1.5rem; position: relative; z-index: 1;
+            contain: layout style paint;
+        }
+        .status-card.perf-mode { backdrop-filter: none !important; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); }
+        .status-card.perf-mode::before { display: none !important; animation: none !important; }
+        .status-card.perf-mode .card-content { background: #ffffff; }
+        .status-card.perf-mode .avatar:hover { box-shadow: none !important; transform: none !important; }
+
+        /* 5. 组件样式 - 头部区域 */
+        .header { display: flex; align-items: center; margin-bottom: var(--section-gap); transition: all 0.4s ease; }
+        .avatar {
+            width: var(--avatar-size); height: var(--avatar-size); border: 3px solid var(--color-primary); border-radius: 50%;
+            background: #f0f0f0 center/cover no-repeat; cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;
+            transform: translateZ(0); will-change: transform;
+        }
+        .avatar:hover { transform: scale(1.05) translateZ(0); box-shadow: 0 0 15px var(--color-accent-glow); }
+        .avatar-placeholder { font-size: 0.75rem; color: var(--color-text-light); text-align: center; line-height: 1.2; padding: 5px; }
+        .identity { transition: all 0.4s ease; margin-left: 1rem; flex: 1; overflow: hidden; display: flex; flex-direction: column; gap: 4px; }
+        .identity .name { font-family: var(--font-tech); font-size: 1.5rem; font-weight: 700; color: var(--color-text-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
+        .identity .tags-container { display: flex; flex-wrap: wrap; gap: 4px; }
+        .identity .title { font-size: 0.85rem; color: var(--color-text-light); background: var(--bg-ring); padding: 2px 8px; border-radius: 5px; white-space: normal; line-height: 1.4; display: inline-block; }
+
+        /* 新增 Body State 样式 */
+        .body-state-tag {
+            font-size: 0.85rem; color: var(--color-body-state); background: var(--bg-body-state);
+            padding: 2px 8px; border-radius: 5px; white-space: nowrap; line-height: 1.4; display: inline-block;
+        }
+
+        .status-card.layout-centered .header { flex-direction: column; text-align: center; }
+        .status-card.layout-centered .identity { margin-left: 0; margin-top: 1rem; align-items: center; }
+        .status-card.layout-centered .tags-container { justify-content: center; }
+
+        /* 6. 组件样式 - 核心状态区 (Vitals) */
+        .vitals { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1.5rem; margin-bottom: var(--section-gap); align-items: start; justify-items: center; }
+        .progress-ring { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; cursor: pointer; transition: transform 0.2s; }
+        .progress-ring:active { transform: scale(0.95); }
+        #power-level-ring { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+
+        .progress-ring-wrapper { position: relative; transition: width 0.3s ease, height 0.3s ease; }
+        #power-level-ring .progress-ring-wrapper { width: var(--power-ring-size); height: var(--power-ring-size); }
+        #craving-ring .progress-ring-wrapper { width: var(--craving-ring-size); height: var(--craving-ring-size); }
+        .progress-ring__svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+        .progress-ring__circle { transition: stroke-dashoffset 0.8s ease-out; transform-origin: 50% 50%; }
+        .progress-ring__track { stroke: var(--bg-ring); }
+        .progress-ring__bar { stroke: var(--color-primary); filter: drop-shadow(0 0 5px var(--color-accent-glow)); stroke-linecap: round; transform: translateZ(0); }
+        #craving-ring .progress-ring__bar { stroke: #ff7e5f; filter: drop-shadow(0 0 5px #ffb3a7); }
+        .status-card.perf-mode .progress-ring__bar { filter: none !important; }
+
+        .progress-ring__text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--color-text-dark); }
+        .progress-ring__text .grade, #craving-ring .percent { font-size: 1.8em; font-weight: 700; }
+        .progress-ring__text .percent { font-size: 0.8em; }
+        .progress-ring__label { font-size: 0.8rem; color: var(--color-text-light); }
+
+        /* 7. 组件样式 - 通用区块与标签 */
+        .section { margin-bottom: var(--section-gap); transition: margin-bottom 0.3s ease; }
+        .section-title { font-size: 0.9rem; font-weight: 600; color: var(--color-text-dark); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; cursor: default; user-select: none;}
+        .section-title.collapsible { cursor: pointer; justify-content: space-between; }
+        .section-title.collapsible::after { content: '▼'; font-size: 0.8em; transition: transform 0.3s ease; }
+        .section-title.collapsible.collapsed::after { transform: rotate(-90deg); }
+        .psyche-bubble { background: var(--bg-task); padding: 0.8rem 1rem; border-radius: 10px; font-size: 0.9rem; color: var(--color-text-light); border-left: 3px solid var(--color-primary); line-height: 1.5; }
+        .surroundings .person-tag {
+            display: inline-block; background: var(--bg-ring); padding: 3px 10px; border-radius: 15px; font-size: 0.8rem; color: var(--color-text-light);
+            margin-right: 0.5rem; margin-bottom: 0.5rem; transition: all 0.2s ease; cursor: pointer;
+            transform: translateZ(0); will-change: transform;
+        }
+        .surroundings .person-tag:hover { background-color: var(--color-primary); color: white; transform: scale(1.05) translateZ(0); }
+        .status-card.perf-mode .person-tag:hover { transform: none !important; }
+
+        /* 物品栏 */
+        .inventory-wrapper { transition: max-height 0.4s ease, opacity 0.4s ease; max-height: 500px; opacity: 1; overflow: visible; }
+        .inventory-wrapper.collapsed { max-height: 0; opacity: 0; overflow: hidden; padding: 0; margin: 0; }
+        .inventory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.8rem; padding: 0.2rem; }
+        .inventory-item {
+            background: #ffffff; border: 1px solid #eee; padding: 0.6rem; border-radius: 10px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+            transition: all 0.2s; position: relative; min-height: 60px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02); z-index: 1; user-select: none;
+        }
+        .inventory-item:hover {
+            border-color: var(--color-primary); background: var(--bg-task-hover);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08); transform: translateY(-2px);
+            z-index: 100;
+        }
+        /* 物品删除按钮 */
+        .inventory-delete-btn {
+            position: absolute; top: -5px; right: -5px;
+            width: 18px; height: 18px; border-radius: 50%;
+            background: var(--color-delete); color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; cursor: pointer; opacity: 0;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .inventory-item:hover .inventory-delete-btn { opacity: 1; }
+        .inventory-delete-btn:hover { transform: scale(1.2); }
+        /* 删除后的动画效果通过 transform scale 实现，类名逻辑在JS中 */
+
+        .inventory-name { font-size: 0.8rem; font-weight: 600; color: var(--color-text-dark); line-height: 1.2; padding-top: 2px; }
+        .inventory-tooltip {
+            position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(10px);
+            background: rgba(44, 62, 80, 0.95); color: white; padding: 6px 10px; border-radius: 6px;
+            font-size: 0.75rem; white-space: nowrap; opacity: 0; pointer-events: none; visibility: hidden;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 101; box-shadow: 0 4px 10px rgba(0,0,0,0.2); margin-bottom: 8px;
+        }
+        .inventory-tooltip::after {
+            content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            border-width: 5px; border-style: solid; border-color: rgba(44, 62, 80, 0.95) transparent transparent transparent;
+        }
+        .inventory-item:hover .inventory-tooltip { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+
+        /* 8. 任务面板 */
+        .task-container { background: var(--bg-task); border-radius: 10px; border: 1px solid #e0e0e0; overflow: hidden; }
+        .task-header { background: var(--color-text-dark); color: white; padding: 0.8rem 1rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;}
+        .task-list, #task-details-container { padding: 0.5rem; }
+        .task-item-summary {
+            display: flex; align-items: center; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease;
+            contain: content; border-bottom: 1px solid #eee;
+        }
+        .task-item-summary:last-child { border-bottom: none; }
+        .task-item-summary:hover { background-color: var(--bg-task-hover); }
+        .task-item-summary input[type="radio"] { margin-right: 0.8rem; width:1.2em; height:1.2em; cursor: pointer; accent-color: var(--color-primary); flex-shrink: 0; }
+        .task-item-info { flex: 1; }
+        .task-item-title { font-weight: 600; font-size: 0.95rem; }
+        .task-item-meta { font-size: 0.8rem; color: var(--color-text-light); margin-top: 2px; }
+        .task-status-badge { font-size: 0.7rem; padding: 2px 6px; background: #e0e0e0; border-radius: 4px; color: #555; }
+        .active-task-badge { background: var(--color-grade-b); color: white; }
+        #task-details-content { display: none; animation: fadeIn 0.5s; padding: 1rem; background-color: #ffffff; border-radius: 8px; margin: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        #task-details-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        .task-subsection { margin-top: 1rem; }
+        .task-subsection:first-child { margin-top: 0; }
+        .task-subsection-title { font-weight: 600; color: var(--color-text-dark); margin-bottom: 0.5rem; padding-bottom: 0.3rem; border-bottom: 1px solid #e8e8e8; font-size: 0.85rem;}
+        .task-description { font-size: 0.85rem; color: var(--color-text-light); line-height: 1.6; word-wrap: break-word; }
+        .task-detail-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.9rem;}
+        .task-detail-item .label { font-weight: 600; flex-shrink: 0; margin-right: 10px; }
+        .task-detail-item .value { color: var(--color-text-light); text-align: right; }
+        .reward-value { color: var(--color-reward); font-weight: bold; }
+        .value.grade-c { color: var(--color-grade-c); }
+        .value.grade-b { color: var(--color-grade-b); }
+        .value.grade-a { color: var(--color-grade-a); }
+        .value.grade-s { color: var(--color-grade-s); }
+        #no-task-message { text-align: center; color: var(--color-text-light); padding: 1.5rem; }
+
+        /* 9. 设置面板与人物面板通用弹窗 */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px);
+            z-index: 20; display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s;
+        }
+        .status-card.perf-mode .modal-overlay { backdrop-filter: none; background: rgba(0,0,0,0.6); }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            width: 90%; max-width: var(--settings-panel-max-width);
+            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid var(--color-border);
+            max-height: 80vh; overflow-y: auto;
+            scrollbar-width: thin; scrollbar-color: var(--color-primary) #f0f7f2;
+            transform: scale(0.95) translateZ(0); will-change: transform;
+        }
+        .modal-overlay.active .modal-content { transform: scale(1) translateZ(0); }
+
+        /* 设置面板特定样式 */
+        #settings-panel .modal-content { max-width: 600px; }
+        .setting-item { margin-bottom: 1rem; }
+        .setting-item label { display: block; font-size: 0.85rem; color: var(--color-text-dark); margin-bottom: 0.4rem; font-weight: bold; }
+        .setting-item label .value-display { float: right; font-weight: normal; color: var(--color-text-light); }
+        .setting-item input[type="range"] {
+            -webkit-appearance: none; width: 100%; height: 8px; background: var(--bg-ring); border-radius: 5px;
+            outline: none; transition: background 0.2s; cursor: pointer;
+        }
+        .setting-item input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 18px; height: 18px; background: var(--color-primary);
+            border-radius: 50%; cursor: pointer; transition: transform 0.2s;
+        }
+        .setting-item input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        .setting-item select { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--color-border); background-color: white; font-family: inherit; }
+        .settings-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .settings-btn {
+            flex: 1; padding: 0.7rem; font-family: var(--font-main); font-size: 0.9rem; border: none;
+            background-color: var(--color-primary); color: white; border-radius: 10px; cursor: pointer; transition: all 0.2s;
+        }
+        .settings-btn:hover { background-color: var(--color-accent-glow); transform: translateY(-2px); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        #reset-settings-btn { background-color: #ffc2d1; color: #c62828; }
+        #reset-settings-btn:hover { background-color: #ff6b6b; color: white; }
+
+        .toggle-switch { position: relative; width: 44px; height: 24px; float: right; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc; transition: .4s; border-radius: 34px;
+        }
+        .toggle-slider:before {
+            position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .toggle-slider { background-color: var(--color-primary); }
+        input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+        /* 10. 人物状态面板 */
+        #people-toggle, #settings-toggle {
+            position: absolute; width: 45px; height: 45px; background: white; border: 2px solid var(--color-border); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 1.8rem; z-index: 10;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+            transform: translateZ(0); will-change: transform;
+        }
+        #people-toggle:hover, #settings-toggle:hover { transform: scale(1.1) rotate(20deg) translateZ(0); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        #settings-toggle { bottom: 1.5rem; left: 1.5rem; }
+        #people-toggle { top: 1.5rem; right: 1.5rem; }
+        .status-card.perf-mode #people-toggle:hover, .status-card.perf-mode #settings-toggle:hover { transform: none; box-shadow: none; }
+
+        #people-panel .modal-content { max-width: var(--people-panel-max-width); }
+        .people-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        .people-table th, .people-table td { padding: 0.8rem 0.6rem; text-align: left; border-bottom: 1px solid #eee; font-size: 0.9rem; word-wrap: break-word; vertical-align: middle;}
+        .people-table th { background: var(--bg-table-header); font-weight: 600; color: var(--color-text-dark); }
+        .people-table td { color: var(--color-text-light); }
+        .people-table tr:last-child td { border-bottom: none; }
+        .mobile-relation { display: none; font-size: 0.75rem; color: #888; margin-top: 4px; font-style: italic; }
+        #no-people-message { text-align: center; color: var(--color-text-light); padding: 1.5rem; }
+
+        /* DOC 面板样式 */
+        #doc-panel .modal-content {
+            max-width: var(--doc-panel-max-width);
+            background: #fdfdfd;
+            border: 2px solid var(--color-primary);
+            position: relative;
+            overflow: hidden;
+            font-family: var(--font-tech);
+        }
+        body:not(.perf-mode) #doc-panel .modal-content::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: var(--chaos-grid-bg), linear-gradient(135deg, rgba(255,255,255,0.95), rgba(235,255,245,0.9));
+            background-size: 20px 20px, 100% 100%;
+            z-index: 0; pointer-events: none; opacity: 0.8;
+        }
+        .chaos-container {
+            position: relative; z-index: 1; display: grid; gap: 1rem;
+            grid-template-areas: "header header" "energy dp" "list list";
+        }
+        .chaos-header { grid-area: header; border-bottom: 2px dashed var(--color-border); padding-bottom: 10px; margin-bottom: 5px; position: relative; }
+        .chaos-header h2 {
+            margin: 0; font-size: 1.8rem; color: var(--color-text-dark); letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: var(--chaos-text-shadow);
+        }
+        .chaos-badge {
+            background: var(--color-text-dark); color: var(--color-primary);
+            padding: 3px 12px; font-size: 1rem; font-weight: bold;
+            display: inline-block; transform: skewX(-15deg); margin-top: 5px;
+            box-shadow: 3px 3px 0 rgba(46, 204, 113, 0.4);
+        }
+        .chaos-badge span { display: block; transform: skewX(15deg); }
+        .chaos-block {
+            background: rgba(255,255,255,0.8); border: 1px solid var(--color-border);
+            padding: 10px; position: relative;
+        }
+        .chaos-block::after {
+            content: ''; position: absolute; bottom: 0; right: 0;
+            width: 0; height: 0; border-style: solid; border-width: 0 0 15px 15px;
+            border-color: transparent transparent var(--color-primary) transparent;
+        }
+        .c-energy { grid-area: energy; border-left: 4px solid var(--color-primary); }
+        .c-dp { grid-area: dp; border-right: 4px solid var(--color-primary); text-align: right; }
+        .c-label { font-size: 0.75rem; color: #888; text-transform: uppercase; display: block; letter-spacing: 1px; }
+        .c-value { font-size: 1.1rem; font-weight: bold; color: var(--color-text-dark); display: block; margin-top: 4px; }
+        .c-list { grid-area: list; display: flex; flex-direction: column; gap: 15px; }
+        .do-card {
+            background: #fff; border: 1px solid #ccc; position: relative;
+            padding: 12px; margin-left: 10px;
+            box-shadow: -5px 5px 0 rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .do-card:hover { transform: translateX(5px); }
+        .do-card::before {
+            content: ''; position: absolute; top: 10px; bottom: 10px; left: -14px; width: 8px;
+            background: var(--bg-ring); border: 1px solid var(--color-border);
+        }
+        .do-head { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #eee; padding-bottom: 5px; margin-bottom: 8px; }
+        .do-name { font-size: 1.3rem; font-weight: 900; color: var(--color-text-dark); }
+        .do-power { font-size: 0.9rem; color: var(--color-primary); background: #333; padding: 2px 6px; color: #fff; transform: skewX(-10deg); }
+        .skill-item { display: flex; justify-content: space-between; margin-top: 6px; font-size: 0.85rem; border-left: 2px solid #ddd; padding-left: 8px; }
+        .skill-info { flex: 1; }
+        .s-name { font-weight: bold; color: #444; margin-right: 5px; }
+        .s-effect { color: #666; font-size: 0.8rem; }
+        .s-cost { color: #e74c3c; font-family: monospace; font-weight: bold; margin-left: 5px; white-space: nowrap;}
+        .doc-empty-msg { text-align: center; padding: 3rem; font-family: var(--font-tech); color: #888; letter-spacing: 2px; text-transform: uppercase; font-size: 1.2rem; }
+
+        /* 👼 圣母小助手 (Style Ported to Ultimate Style) */
+        .helper-card-v2 {
+            margin: 0 auto; background: #fff; border: 2px solid var(--color-primary); border-radius: 16px;
+            padding: 1.5rem; max-width: 400px; text-align: center; font-family: var(--font-main);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.2);
+        }
+        .helper-header { margin-bottom: 1rem; }
+        .helper-icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+        .helper-title { font-size: 1.2rem; color: var(--color-text-dark); font-weight: bold; font-family: var(--font-tech); text-transform: uppercase;}
+        .helper-content { color: var(--color-text-light); margin-bottom: 1.5rem; white-space: pre-wrap; line-height: 1.6; font-size: 0.95rem;}
+        .helper-actions { display: flex; gap: 1rem; justify-content: center; }
+        .helper-btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-family: var(--font-main); font-size: 0.9rem; transition: all 0.2s; font-weight: bold;}
+        .helper-btn.confirm { background: var(--color-delete); color: white; box-shadow: 0 4px 0 #c0392b; }
+        .helper-btn.cancel { background: #dfe6e9; color: var(--color-text-light); box-shadow: 0 4px 0 #b2bec3; }
+        .helper-btn:active { transform: translateY(4px); box-shadow: none; }
+        .helper-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .helper-meta { font-size: 0.7rem; color: #aaa; margin-top: 1rem; font-style: italic;}
+
+        /* 11. 响应式布局 */
+        @media (max-width: 500px) {
+            :root { --section-gap: 1rem; --base-font-size: 14px; }
+            body { padding: 0.5rem; }
+            .card-content { padding: 1rem; }
+            .header { flex-direction: column; text-align: center; }
+            .identity { margin-left: 0; margin-top: 1rem; }
+            .identity .name { font-size: 1.3rem; }
+            .status-card.layout-centered .header { flex-direction: column; text-align: center; }
+            .modal-content { padding: 1rem; width: 95%; max-height: 85vh; }
+            .people-table th:nth-child(2), .people-table td:nth-child(2) { display: none; }
+            .mobile-relation { display: block; }
+            .chaos-container { grid-template-areas: "header" "energy" "dp" "list"; }
+            .c-dp { border-right: none; border-left: 4px solid #ff7e5f; text-align: left;}
+        }
+    </style>
+</head>
+<body>
+<!-- disable-default-loading -->
+    <div id="status-card-wrapper" class="status-card perf-mode">
+        <div class="card-content">
+            <div id="ui-structure">
+                <div class="header">
+                    <div id="avatar" class="avatar user_avatar"><span id="avatar-placeholder" class="avatar-placeholder">更换头像</span></div>
+                    <div class="identity">
+                        <div id="char-name" class="name">...</div>
+                        <div class="tags-container" id="identity-tags-container">
+                             <div id="char-title" class="title">...</div>
+                             <!-- 动态插入 body state -->
+                        </div>
+                    </div>
+                </div>
+                <div id="vitals" class="vitals">
+                    <div class="progress-ring" id="power-level-ring"><div class="progress-ring-wrapper"><svg class="progress-ring__svg" viewBox="0 0 100 100"><circle class="progress-ring__track" stroke-width="10" fill="transparent" r="45" cx="50" cy="50"/><circle class="progress-ring__bar" stroke-width="10" fill="transparent" r="45" cx="50" cy="50"/></svg><div class="progress-ring__text"><span class="grade">--</span><span class="percent">--%</span></div></div><div class="progress-ring__label">引欲等级</div></div>
+                    <div class="progress-ring" id="craving-ring"><div class="progress-ring-wrapper"><svg class="progress-ring__svg" viewBox="0 0 100 100"><circle class="progress-ring__track" stroke-width="10" fill="transparent" r="45" cx="50" cy="50"/><circle class="progress-ring__bar" stroke-width="10" fill="transparent" r="45" cx="50" cy="50"/></svg><div class="progress-ring__text"><span class="percent">--%</span></div></div><div id="craving-label" class="progress-ring__label">...</div></div>
+                </div>
+
+                <div class="section">
+                     <div class="section-title">🧠 心理活动</div>
+                     <div id="psyche-bubble" class="psyche-bubble">...</div>
+                </div>
+
+                <div class="section">
+                    <div id="inventory-title" class="section-title collapsible collapsed">🎒 物品栏</div>
+                    <div id="inventory-wrapper" class="inventory-wrapper collapsed">
+                        <div id="inventory-grid" class="inventory-grid"></div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">📡 周围</div>
+                    <div id="surroundings-list" class="surroundings"></div>
+                </div>
+
+                <div id="task-panel" class="section"></div>
+            </div>
+        </div>
+
+        <div id="settings-toggle">🌸</div>
+        <div id="people-toggle">👥</div>
+    </div>
+
+    <!-- 设置面板 -->
+    <div id="settings-panel" class="modal-overlay">
+        <div class="modal-content">
+            <div class="setting-item" style="border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <label for="perf-toggle" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>⚡ 性能优化 (关闭特效)</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="perf-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </label>
+            </div>
+            <div class="setting-item"><label>面板宽度: <span class="value-display" id="width-value"></span></label><input type="range" id="width-slider" min="300" max="1000"></div>
+            <div class="setting-item"><label>区块间距: <span class="value-display" id="spacing-value"></span></label><input type="range" id="spacing-slider" min="0.5" max="6" step="0.1"></div>
+            <div class="setting-item"><label>字体大小: <span class="value-display" id="font-size-value"></span></label><input type="range" id="font-size-slider" min="12" max="30"></div>
+            <div class="setting-item">
+                <label>界面字体:</label>
+                <select id="font-selector">
+                    <option value="'Poppins', sans-serif">现代 (默认)</option>
+                    <option value="'Noto Serif SC', serif">典雅宋体</option>
+                    <option value="'ZCOOL XiaoWei', sans-serif">清秀手写</option>
+                    <option value="'ZCOOL KuaiLe', sans-serif">可爱圆体</option>
+                    <option value="'Share Tech Mono', monospace">复古科技</option>
+                    <option value="'Press Start 2P', cursive">像素游戏</option>
+                </select>
+            </div>
+            <div class="setting-item"><label>人物面板宽度: <span class="value-display" id="people-panel-width-value"></span></label><input type="range" id="people-panel-width-slider" min="300" max="1000"></div>
+            <hr style="border:none; border-top:1px dashed var(--color-border); margin: 1rem 0;">
+            <div class="setting-item"><label>头像尺寸: <span class="value-display" id="avatar-size-value"></span></label><input type="range" id="avatar-size-slider" min="40" max="500"></div>
+            <div class="setting-item"><label>战力环尺寸: <span class="value-display" id="power-ring-size-value"></span></label><input type="range" id="power-ring-size-slider" min="60" max="450"></div>
+            <div class="setting-item"><label>渴求环尺寸: <span class="value-display" id="craving-ring-size-value"></span></label><input type="range" id="craving-ring-size-slider" min="60" max="450"></div>
+            <div class="settings-actions">
+                <button id="toggle-layout-btn" class="settings-btn">切换布局</button>
+                <button id="reset-settings-btn" class="settings-btn">恢复默认</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 人物面板 -->
+    <div id="people-panel" class="modal-overlay">
+        <div class="modal-content">
+            <div id="people-table-content"></div>
+        </div>
+    </div>
+
+    <!-- DOC引欲详情面板 -->
+    <div id="doc-panel" class="modal-overlay">
+        <div class="modal-content">
+            <div id="doc-content"></div>
+        </div>
+    </div>
+
+    <!-- 圣母小助手：删除确认自定义弹窗 -->
+    <div id="delete-confirm-panel" class="modal-overlay">
+        <div class="helper-card-v2">
+            <div class="helper-header">
+                <span class="helper-icon">🕊️</span>
+                <span class="helper-title">圣母小助手</span>
+            </div>
+            <div id="delete-msg-content" class="helper-content"></div>
+            <div class="helper-actions">
+                <button id="confirm-delete-btn" class="helper-btn confirm">确认丢弃</button>
+                <button id="cancel-delete-btn" class="helper-btn cancel">算了</button>
+            </div>
+            <div class="helper-meta">悄悄丢掉的东西，{{user}}不会察觉哦...</div>
+        </div>
+    </div>
+
+    <script>
+        const requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const App = {
+                state: {
+                    parsedData: { user: {}, tasks: [], people: [] },
+                    prevRenderData: {
+                        name: null, title: null, psyche: null,
+                        cravingType: null, power: null, cravingVal: null,
+                        surroundings: null, inventory: null,
+                        tasks: null, people: null, bodyState: null
+                    },
+                    settings: {},
+                    uniqueId: 'default',
+                    db: null,
+                    currentAvatarUrl: null,
+                    throttleTimers: {},
+                    pendingDeleteItem: null
+                },
+                elements: {
+                    root: document.documentElement,
+                    body: document.body,
+                    statusCard: document.getElementById('status-card-wrapper'),
+                    avatar: document.getElementById('avatar'),
+                    avatarPlaceholder: document.getElementById('avatar-placeholder'),
+                    text: {
+                        name: document.getElementById('char-name'),
+                        title: document.getElementById('char-title'),
+                        cravingLabel: document.getElementById('craving-label'),
+                        psyche: document.getElementById('psyche-bubble'),
+                        tagContainer: document.getElementById('identity-tags-container')
+                    },
+                    containers: {
+                        vitals: document.getElementById('vitals'),
+                        surroundings: document.getElementById('surroundings-list'),
+                        inventory: document.getElementById('inventory-grid'),
+                        inventoryWrapper: document.getElementById('inventory-wrapper'),
+                        inventoryTitle: document.getElementById('inventory-title'),
+                        taskPanel: document.getElementById('task-panel'),
+                        peopleTableContent: document.getElementById('people-table-content'),
+                        docContent: document.getElementById('doc-content')
+                    },
+                    rings: {
+                        power: document.getElementById('power-level-ring'),
+                        craving: document.getElementById('craving-ring')
+                    },
+                    settings: {
+                        toggle: document.getElementById('settings-toggle'),
+                        panel: document.getElementById('settings-panel'),
+                        perfToggle: document.getElementById('perf-toggle'),
+                        sliders: {
+                            width: document.getElementById('width-slider'),
+                            spacing: document.getElementById('spacing-slider'),
+                            fontSize: document.getElementById('font-size-slider'),
+                            avatarSize: document.getElementById('avatar-size-slider'),
+                            powerRingSize: document.getElementById('power-ring-size-slider'),
+                            cravingRingSize: document.getElementById('craving-ring-size-slider'),
+                            peoplePanelWidth: document.getElementById('people-panel-width-slider')
+                        },
+                        values: {
+                            width: document.getElementById('width-value'),
+                            spacing: document.getElementById('spacing-value'),
+                            fontSize: document.getElementById('font-size-value'),
+                            avatarSize: document.getElementById('avatar-size-value'),
+                            powerRingSize: document.getElementById('power-ring-size-value'),
+                            cravingRingSize: document.getElementById('craving-ring-size-value'),
+                            peoplePanelWidth: document.getElementById('people-panel-width-value')
+                        },
+                        fontSelector: document.getElementById('font-selector'),
+                        buttons: {
+                            toggleLayout: document.getElementById('toggle-layout-btn'),
+                            reset: document.getElementById('reset-settings-btn')
+                        }
+                    },
+                    people: {
+                        toggle: document.getElementById('people-toggle'),
+                        panel: document.getElementById('people-panel')
+                    },
+                    doc: {
+                        panel: document.getElementById('doc-panel')
+                    },
+                    deleteConfirm: {
+                        panel: document.getElementById('delete-confirm-panel'),
+                        msgContent: document.getElementById('delete-msg-content'),
+                        btnConfirm: document.getElementById('confirm-delete-btn'),
+                        btnCancel: document.getElementById('cancel-delete-btn')
+                    }
+                },
+
+                throttle(func, limit) {
+                    return (...args) => {
+                        if (!this.state.throttleTimers[func]) {
+                            func.apply(this, args);
+                            this.state.throttleTimers[func] = setTimeout(() => {
+                                delete this.state.throttleTimers[func];
+                            }, limit);
+                        }
+                    };
+                },
+
+                db: {
+                    DB_NAME: 'UISettingsDB',
+                    DB_VERSION: 1,
+                    AVATAR_STORE_NAME: 'avatars',
+                    async init() {
+                        if (App.state.db) return App.state.db;
+                        return new Promise((resolve, reject) => {
+                            const request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
+                            request.onerror = () => reject('数据库错误');
+                            request.onsuccess = event => { App.state.db = event.target.result; resolve(App.state.db); };
+                            request.onupgradeneeded = event => {
+                                const db = event.target.result;
+                                if (!db.objectStoreNames.contains(this.AVATAR_STORE_NAME)) db.createObjectStore(this.AVATAR_STORE_NAME);
+                            };
+                        });
+                    },
+                    async save(key, data) {
+                        const db = await this.init();
+                        return new Promise((resolve, reject) => {
+                            const tx = db.transaction([this.AVATAR_STORE_NAME], 'readwrite');
+                            tx.objectStore(this.AVATAR_STORE_NAME).put(data, key).onsuccess = resolve;
+                            tx.onerror = e => reject(e.target.error);
+                        });
+                    },
+                    async load(key) {
+                        const db = await this.init();
+                        return new Promise((resolve, reject) => {
+                            const req = db.transaction([this.AVATAR_STORE_NAME], 'readonly').objectStore(this.AVATAR_STORE_NAME).get(key);
+                            req.onsuccess = () => resolve(req.result);
+                            req.onerror = e => reject(e.target.error);
+                        });
+                    }
+                },
+
+                settings: {
+                    DEFAULTS: {
+                        width: 488, spacing: 1.5, fontSize: 16, avatarSize: 60,
+                        powerRingSize: 100, cravingRingSize: 100, layout: 'default',
+                        fontFamily: "'Poppins', sans-serif", peoplePanelWidth: 600,
+                        performanceMode: true
+                    },
+                    getStorageKey: () => `uiSettings_${App.state.uniqueId}`,
+                    load() {
+                        let saved = {};
+                        try { saved = JSON.parse(localStorage.getItem(this.getStorageKey())) || {}; } catch (e) {}
+                        App.state.settings = { ...this.DEFAULTS, ...saved };
+                        this.apply(App.state.settings);
+                        this.updateUIControls(App.state.settings);
+                    },
+                    apply(s) {
+                        const e = App.elements;
+                        requestAnimationFrame(() => {
+                            e.root.style.setProperty('--card-max-width', `${s.width}px`);
+                            e.root.style.setProperty('--section-gap', `${s.spacing}rem`);
+                            e.root.style.setProperty('--base-font-size', `${s.fontSize}px`);
+                            e.root.style.setProperty('--avatar-size', `${s.avatarSize}px`);
+                            e.root.style.setProperty('--power-ring-size', `${s.powerRingSize}px`);
+                            e.root.style.setProperty('--craving-ring-size', `${s.cravingRingSize}px`);
+                            e.root.style.setProperty('--font-main', s.fontFamily);
+                            e.root.style.setProperty('--people-panel-max-width', `${s.peoplePanelWidth}px`);
+
+                            if (s.performanceMode) {
+                                e.statusCard.classList.add('perf-mode');
+                                e.body.classList.add('perf-mode');
+                            } else {
+                                e.statusCard.classList.remove('perf-mode');
+                                e.body.classList.remove('perf-mode');
+                            }
+
+                            Object.keys(e.settings.values).forEach(key => {
+                                if (e.settings.values[key]) {
+                                    const val = s[key];
+                                    const unit = key.includes('spacing') ? 'rem' : 'px';
+                                    e.settings.values[key].textContent = `${val}${unit}`;
+                                }
+                            });
+                            e.statusCard.classList.toggle('layout-centered', s.layout === 'centered');
+                        });
+                    },
+                    updateUIControls(s) {
+                        Object.keys(App.elements.settings.sliders).forEach(k => {
+                           if (App.elements.settings.sliders[k]) App.elements.settings.sliders[k].value = s[k];
+                        });
+                        App.elements.settings.fontSelector.value = s.fontFamily;
+                        App.elements.settings.perfToggle.checked = s.performanceMode;
+                    },
+                    save() {
+                        const { sliders, fontSelector, perfToggle } = App.elements.settings;
+                        const newS = { ...App.state.settings };
+                        Object.keys(sliders).forEach(k => { if(sliders[k]) newS[k] = parseFloat(sliders[k].value); });
+                        newS.fontFamily = fontSelector.value;
+                        newS.performanceMode = perfToggle.checked;
+
+                        App.state.settings = newS;
+                        localStorage.setItem(this.getStorageKey(), JSON.stringify(newS));
+                        this.apply(newS);
+                    },
+                    toggleLayout() { App.state.settings.layout = (App.state.settings.layout === 'default') ? 'centered' : 'default'; this.save(); },
+                    reset() {
+                        if(confirm('重置所有设置？')) {
+                            App.state.settings = { ...this.DEFAULTS };
+                            localStorage.removeItem(this.getStorageKey());
+                            this.apply(App.state.settings);
+                            this.updateUIControls(App.state.settings);
+                        }
+                    }
+                },
+
+                ui: {
+                    updateAvatar(file) {
+                        if (App.state.currentAvatarUrl) { URL.revokeObjectURL(App.state.currentAvatarUrl); App.state.currentAvatarUrl = null; }
+                        if (file) {
+                            const url = URL.createObjectURL(file);
+                            App.state.currentAvatarUrl = url;
+                            App.elements.avatar.style.backgroundImage = `url(${url})`;
+                            App.elements.avatarPlaceholder.style.display = 'none';
+                        } else {
+                            App.elements.avatar.style.backgroundImage = 'none';
+                            App.elements.avatarPlaceholder.style.display = 'flex';
+                        }
+                    },
+                    setRingProgress(ringEl, pct, grade) {
+                        const bar = ringEl.querySelector('.progress-ring__bar');
+                        if (!bar) return;
+                        const r = bar.r.baseVal.value; const circ = 2 * Math.PI * r;
+                        bar.style.strokeDasharray = `${circ} ${circ}`;
+                        requestAnimationFrame(() => { bar.style.strokeDashoffset = circ - (pct / 100) * circ; });
+                        if(ringEl.querySelector('.percent')) ringEl.querySelector('.percent').textContent = `${pct}%`;
+                        if (grade && ringEl.querySelector('.grade')) ringEl.querySelector('.grade').textContent = grade;
+                    },
+
+                    renderSurroundings(container, tagsStr) {
+                        const fragment = document.createDocumentFragment();
+                        container.innerHTML = '';
+                        if (tagsStr) {
+                            tagsStr.split(/[,\，]/).forEach(tag => {
+                                if (!tag.trim()) return;
+                                const span = document.createElement('span');
+                                span.className = 'person-tag';
+                                span.textContent = tag.trim();
+                                fragment.appendChild(span);
+                            });
+                            container.appendChild(fragment);
+                        }
+                    },
+
+                    renderInventory(container, inventoryData) {
+                        container.innerHTML = '';
+                        if (!inventoryData || Object.keys(inventoryData).length === 0) {
+                            container.innerHTML = '<div style="color:var(--color-text-light);font-size:0.8rem;grid-column:1/-1;text-align:center;">暂无物品</div>';
+                            return;
+                        }
+
+                        const fragment = document.createDocumentFragment();
+                        Object.entries(inventoryData).forEach(([name, count]) => {
+                            const item = document.createElement('div');
+                            item.className = 'inventory-item';
+                            item.dataset.key = name; // 添加 data-key 用于定位删除动画
+
+                            item.innerHTML = `
+                                <div class="inventory-name">${name}</div>
+                                <div class="inventory-tooltip">${count}</div>
+                                <div class="inventory-delete-btn" title="丢弃">✕</div>
+                            `;
+                            const btn = item.querySelector('.inventory-delete-btn');
+                            btn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                App.actions.deleteInventoryItem(name);
+                            });
+
+                            fragment.appendChild(item);
+                        });
+                        container.appendChild(fragment);
+                    },
+
+                    renderTaskPanel() {
+                        const { taskPanel } = App.elements.containers;
+                        taskPanel.innerHTML = '';
+                        const tasks = App.state.parsedData.tasks || [];
+                        if (tasks.length === 0) {
+                            taskPanel.innerHTML = `<div class="task-container"><div class="task-header">任务档案</div><div id="no-task-message">当前无任务</div></div>`;
+                            return;
+                        }
+                        const key = `trackedTask_${App.state.uniqueId}`;
+                        let trackedId = localStorage.getItem(key);
+                        if (!trackedId || !tasks.some(t => t.id === trackedId)) trackedId = tasks[0].id;
+                        const fragment = document.createDocumentFragment();
+                        const container = document.createElement('div');
+                        container.className = 'task-container';
+                        container.innerHTML = `<div class="task-header"><span>任务档案</span></div><div class="task-list"></div><div id="task-details-container"></div>`;
+                        const taskList = container.querySelector('.task-list');
+                        tasks.forEach(t => {
+                            const label = document.createElement('label');
+                            label.className = 'task-item-summary';
+                            const titleDisplay = t.grade && t.grade !== '无' ? `[${t.grade}] ${t.title}` : t.title;
+                            const statusBadge = t.status ? `<span class="task-status-badge ${t.status.includes('进行')?'active-task-badge':''}">${t.status}</span>` : '';
+                            label.innerHTML = `
+                                <input type="radio" name="tracked-task" value="${t.id}" ${t.id === trackedId ? 'checked':''}>
+                                <div class="task-item-info">
+                                    <div class="task-item-title">${titleDisplay} ${statusBadge}</div>
+                                    <div class="task-item-meta">期限: ${t.deadline || '无'}</div>
+                                </div>
+                            `;
+                            taskList.appendChild(label);
+                        });
+                        fragment.appendChild(container);
+                        taskPanel.appendChild(fragment);
+                        if (trackedId) this.renderTaskDetails(container.querySelector('#task-details-container'), trackedId);
+                    },
+
+                    renderTaskDetails(container, taskId) {
+                        const task = App.state.parsedData.tasks.find(t => t.id === taskId);
+                        if (!task || !container) return;
+                        const detailsContent = document.createElement('div');
+                        detailsContent.id = 'task-details-content';
+                        detailsContent.className = 'active';
+                        let gradeClass = 'grade-c';
+                        if (task.grade) {
+                            const g = task.grade.toLowerCase().replace('级','');
+                            if (['a','b','s'].includes(g)) gradeClass = `grade-${g}`;
+                        }
+                        detailsContent.innerHTML = `
+                            <div class="task-subsection">
+                                <div class="task-detail-item"><span class="label">推荐等级:</span><span class="value ${gradeClass}">${task.grade || '无'}</span></div>
+                                <div class="task-detail-item"><span class="label">奖励:</span><span class="value reward-value">${task.reward || '无'}</span></div>
+                            </div>
+                            <div class="task-subsection">
+                                <div class="task-subsection-title">📄 简报</div>
+                                <p class="task-description">${task.brief || '无详细描述'}</p>
+                            </div>
+                        `;
+                        container.innerHTML = '';
+                        container.appendChild(detailsContent);
+                    },
+
+                    renderPeoplePanel() {
+                        const { peopleTableContent } = App.elements.containers;
+                        const people = App.state.parsedData.people || [];
+                        if (people.length === 0) {
+                            peopleTableContent.innerHTML = `<div id="no-people-message">当前场景无主要人物</div>`;
+                            return;
+                        }
+                        const table = document.createElement('table');
+                        table.className = 'people-table';
+                        table.innerHTML = `
+                            <thead><tr>
+                                <th style="width:25%">人物</th><th style="width:25%">关系</th><th style="width:20%">心情</th><th style="width:15%">好感</th><th style="width:15%">动向</th>
+                            </tr></thead>
+                            <tbody>
+                                ${people.map(p => `<tr><td><strong>${p.name}</strong><span class="mobile-relation">${p.relationship || ''}</span></td><td>${p.relationship || '-'}</td><td>${p.mood || '-'}</td><td>${p.favorability || '-'}</td><td>${p.situation || '-'}</td></tr>`).join('')}
+                            </tbody>
+                        `;
+                        peopleTableContent.innerHTML = '';
+                        peopleTableContent.appendChild(table);
+                    },
+
+                    renderDocPanel() {
+                        const { docContent } = App.elements.containers;
+                        const doc = App.state.parsedData.user.doc || {};
+                        if (!doc.status) {
+                            docContent.innerHTML = `<div class="doc-empty-msg">⚠️ 尚未引欲 | ACCESS DENIED</div>`;
+                            return;
+                        }
+                        const doListHTML = doc.do_list.map(d => `
+                            <div class="do-card">
+                                <div class="do-head"><div class="do-name">${d.name}</div><div class="do-power">${d.superpower}</div></div>
+                                ${d.skills.map(s => `<div class="skill-item"><div class="skill-info"><span class="s-name">${s.name}</span><span class="s-effect">${s.effect}</span></div><div class="s-cost">${s.cost}</div></div>`).join('')}
+                            </div>
+                        `).join('');
+                        docContent.innerHTML = `
+                            <div class="chaos-container">
+                                <div class="chaos-header"><h2>DOC PROTOCOL</h2><div class="chaos-badge"><span>${doc.type || '未知'}引欲人 [ Lv.${doc.level || '?'} ]</span></div></div>
+                                <div class="chaos-block c-energy"><span class="c-label">ENERGY: ${doc.energy.type || 'N/A'}</span><span class="c-value">${doc.energy.available || 0} <span style="font-size:0.8em;color:#aaa">/ ${doc.energy.cap || 0}</span></span></div>
+                                <div class="chaos-block c-dp"><span class="c-label">DP CORE: ${doc.dp.type || '未知'}</span><span class="c-value" style="color:${doc.dp.status==='休眠'?'#aaa':'var(--color-primary)'}">${doc.dp.status || 'OFFLINE'}</span></div>
+                                <div class="c-list"><span class="c-label" style="padding-left:10px">/// DO_MODULES</span>${doListHTML || '<span style="padding-left:10px;color:#aaa">NO MODULES DETECTED</span>'}</div>
+                            </div>
+                        `;
+                    },
+
+                    renderBodyState(statesStr) {
+                         const container = App.elements.text.tagContainer;
+                         const oldStates = container.querySelectorAll('.body-state-tag');
+                         oldStates.forEach(el => el.remove());
+
+                         if (!statesStr) return;
+
+                         const fragment = document.createDocumentFragment();
+                         const states = statesStr.split(/[、,，]/).map(s => s.trim()).filter(s => s);
+                         states.forEach(s => {
+                             const tag = document.createElement('div');
+                             tag.className = 'body-state-tag';
+                             tag.textContent = s;
+                             fragment.appendChild(tag);
+                         });
+                         container.appendChild(fragment);
+                    },
+
+                    updateAll() {
+                        const d = App.state.parsedData;
+                        const prev = App.state.prevRenderData;
+                        const { text, rings, containers } = App.elements;
+
+                        if (!d || !d.user) return;
+
+                        requestAnimationFrame(() => {
+                            if (d.user.name !== prev.name) { text.name.textContent = d.user.name || 'Unknown'; prev.name = d.user.name; }
+
+                            if (d.user.identity !== prev.title) {
+                                text.title.textContent = d.user.identity || '...';
+                                prev.title = d.user.identity;
+                            }
+
+                            if (d.user.bodyState !== prev.bodyState) {
+                                this.renderBodyState(d.user.bodyState);
+                                prev.bodyState = d.user.bodyState;
+                            }
+
+                            if (d.user.psyche !== prev.psyche) { text.psyche.textContent = d.user.psyche || '...'; prev.psyche = d.user.psyche; }
+
+                            const ringChanged = (d.user.powerGrade !== prev.power) || (d.user.powerPercent !== prev.powerPct) || (d.user.cravingVal !== prev.cravingVal) || (d.user.cravingType !== prev.cravingType);
+                            if (ringChanged) {
+                                if (d.user.cravingType === '以太') text.cravingLabel.textContent = 'LSP渴求';
+                                else if (d.user.cravingType === 'LSP') text.cravingLabel.textContent = '以太渴求';
+                                else text.cravingLabel.textContent = '渴求度';
+                                this.setRingProgress(rings.power, d.user.powerPercent || 0, d.user.powerGrade);
+                                this.setRingProgress(rings.craving, d.user.cravingVal || 0, null);
+                                prev.power = d.user.powerGrade; prev.powerPct = d.user.powerPercent;
+                                prev.cravingVal = d.user.cravingVal; prev.cravingType = d.user.cravingType;
+                            }
+
+                            if (d.user.surroundings !== prev.surroundings) {
+                                this.renderSurroundings(containers.surroundings, d.user.surroundings); prev.surroundings = d.user.surroundings;
+                            }
+                            const invJson = JSON.stringify(d.user.inventory);
+                            if (invJson !== prev.inventory) { this.renderInventory(containers.inventory, d.user.inventory); prev.inventory = invJson; }
+                            const taskJson = JSON.stringify(d.tasks);
+                            if (taskJson !== prev.tasks) { this.renderTaskPanel(); prev.tasks = taskJson; }
+                            const peopleJson = JSON.stringify(d.people);
+                            if (peopleJson !== prev.people) { this.renderPeoplePanel(); prev.people = peopleJson; }
+                        });
+                    }
+                },
+
+                // 新增 Actions 处理删除逻辑
+                actions: {
+                    deleteInventoryItem(itemName) {
+                        App.state.pendingDeleteItem = itemName;
+                        App.elements.deleteConfirm.msgContent.textContent = `确定要丢弃 [ ${itemName} ] 吗？\n删除操作不可撤销...`;
+                        App.elements.deleteConfirm.panel.classList.add('active');
+                    },
+
+                    async confirmDelete() {
+                        const itemName = App.state.pendingDeleteItem;
+                        if (!itemName) return;
+
+                        const payload = {
+                            user: {
+                                info: {
+                                    Inventory: { [itemName]: {} }
+                                }
+                            }
+                        };
+
+                        try {
+                            if (window.eventEmit) {
+                                await window.eventEmit('era:deleteByObject', payload);
+                                // 删除后的视觉反馈
+                                const itemEl = document.querySelector(`.inventory-item[data-key="${itemName.replace(/"/g, '\\"')}"]`);
+                                if (itemEl) {
+                                    itemEl.style.transition = 'all 0.2s';
+                                    itemEl.style.opacity = '0';
+                                    itemEl.style.transform = 'scale(0.8)';
+                                    setTimeout(() => itemEl.remove(), 200);
+
+                                    // 如果清空了，显示空消息
+                                    setTimeout(() => {
+                                        const container = App.elements.containers.inventory;
+                                        if (container && container.querySelectorAll('.inventory-item').length === 0) {
+                                            container.innerHTML = '<div style="color:var(--color-text-light);font-size:0.8rem;grid-column:1/-1;text-align:center;">暂无物品</div>';
+                                        }
+                                    }, 205);
+                                }
+                            } else {
+                                // 兼容性 Fallback：尝试使用 slash 命令模拟（虽然 Cute 版只用了 eventEmit，但为了防止报错保留少量逻辑）
+                                console.warn('eventEmit not available, trying triggerSlash for simulation...');
+                                if(typeof window.triggerSlash === 'function') {
+                                    const jsonString = JSON.stringify(payload, null, 2);
+                                    await window.triggerSlash(`/sendas name="Frontend Assistant" <聖母小助手>\n已删除"${itemName}"。\n<VariableDelete>\n${jsonString}\n</VariableDelete>\n</聖母小助手>`);
+                                     const itemEl = document.querySelector(`.inventory-item[data-key="${itemName.replace(/"/g, '\\"')}"]`);
+                                     if(itemEl) itemEl.remove();
+                                } else {
+                                    alert('无法连接到手账扩展系统(SillyTavern)');
+                                }
+                            }
+                        } catch (e) { alert('操作失败'); }
+
+                        App.elements.deleteConfirm.panel.classList.remove('active');
+                        App.state.pendingDeleteItem = null;
+                    },
+
+                    cancelDelete() {
+                        App.elements.deleteConfirm.panel.classList.remove('active');
+                        App.state.pendingDeleteItem = null;
+                    }
+                },
+
+                parsers: {
+                    getVariableData: async () => {
+                        try {
+                            if (typeof window.getVariables !== 'function') return null;
+                            const vars = await window.getVariables();
+                            let raw = vars['stat_data'];
+                            if (typeof raw === 'string') raw = JSON.parse(raw);
+                            return raw || {};
+                        } catch (e) { return {}; }
+                    },
+
+                    cleanStr(str) {
+                        if (typeof str !== 'string') return str;
+                        return str.replace(/__DOT__/g, '.').replace(/__SPACE__/g, ' ');
+                    },
+
+                    parseData(data) {
+                        const p = { user: {}, tasks: [], people: [] };
+                        if (!data) return p;
+
+                        const clean = this.cleanStr;
+
+                        const u = data.user || {};
+                        const info = u.info || {};
+                        const doc = info.DOC || {};
+                        const dp = info.DOC?.DP || { estrus: { value: 0 } };
+
+                        const doList = [];
+                        if (doc.DP && doc.DP.DO) {
+                            Object.entries(doc.DP.DO).forEach(([k, v]) => {
+                                const skills = [];
+                                Object.entries(v).forEach(([sk, sv]) => {
+                                    if (sk.startsWith('skill_')) {
+                                        sv.name = clean(sv.name);
+                                        sv.effect = clean(sv.effect);
+                                        skills.push(sv);
+                                    }
+                                });
+                                doList.push({ name: clean(v.name), superpower: clean(v.superpower), skills: skills });
+                            });
+                        }
+
+                        p.user = {
+                            name: clean(info.name),
+                            identity: clean(info.identity),
+                            bodyState: clean(info.body_state),
+                            surroundings: clean(info.surroundings),
+                            psyche: clean(info.Psychological_description),
+                            inventory: info.Inventory || {},
+                            powerGrade: doc.level || '?',
+                            powerPercent: parseInt(doc.Level_Percentage || 0),
+                            cravingType: doc.type,
+                            cravingVal: dp.estrus ? parseInt(dp.estrus.value || 0) : 0,
+                            doc: {
+                                status: doc.Status, type: doc.type, level: doc.level,
+                                energy: doc.energy || {}, dp: doc.DP ? { status: doc.DP.status, type: doc.DP.type } : {},
+                                do_list: doList
+                            }
+                        };
+                        const t = u.task || {};
+                        Object.entries(t).forEach(([key, val]) => {
+                            const gradeMatch = (val.suggestion || "").match(/([A-Za-z0-9]+级|无)/);
+                            const grade = gradeMatch ? gradeMatch[1] : "无";
+                            p.tasks.push({
+                                id: key,
+                                title: clean(val.title),
+                                brief: clean(val.description),
+                                deadline: val.deadline,
+                                reward: val.reward,
+                                status: clean(val.status),
+                                grade: grade,
+                                suggestion: val.suggestion
+                            });
+                        });
+                        const c = data.character || {};
+                        Object.entries(c).forEach(([key, val]) => {
+                            const cInfo = val.info || {};
+                            p.people.push({
+                                name: clean(key),
+                                mood: clean(cInfo.mood),
+                                favorability: clean(cInfo.favorability),
+                                situation: clean(cInfo.situation),
+                                relationship: clean(cInfo.relationship)
+                            });
+                        });
+                        return p;
+                    }
+                },
+
+                bindEvents() {
+                    const { settings, avatar, containers, people, rings, doc, deleteConfirm } = App.elements;
+
+                    function toggleModal(panel) { panel.classList.toggle('active'); }
+
+                    settings.toggle.addEventListener('click', () => toggleModal(settings.panel));
+                    people.toggle.addEventListener('click', () => toggleModal(people.panel));
+                    rings.power.addEventListener('click', () => { App.ui.renderDocPanel(); toggleModal(doc.panel); });
+
+                    [settings.panel, people.panel, doc.panel, deleteConfirm.panel].forEach(panel => {
+                        panel.addEventListener('click', (e) => {
+                             if (e.target === panel) {
+                                if (panel === deleteConfirm.panel) App.actions.cancelDelete();
+                                else toggleModal(panel);
+                             }
+                        });
+                    });
+
+                    deleteConfirm.btnConfirm.addEventListener('click', App.actions.confirmDelete);
+                    deleteConfirm.btnCancel.addEventListener('click', App.actions.cancelDelete);
+
+                    containers.inventoryTitle.addEventListener('click', () => {
+                         containers.inventoryWrapper.classList.toggle('collapsed');
+                         containers.inventoryTitle.classList.toggle('collapsed');
+                    });
+
+                    settings.perfToggle.addEventListener('change', () => App.settings.save());
+                    Object.values(settings.sliders).forEach(s => { if(s) s.addEventListener('input', App.throttle(() => App.settings.save(), 100)); });
+                    settings.fontSelector.addEventListener('change', () => App.settings.save());
+                    settings.buttons.toggleLayout.addEventListener('click', () => App.settings.toggleLayout());
+                    settings.buttons.reset.addEventListener('click', () => App.settings.reset());
+
+                    containers.taskPanel.addEventListener('change', e => {
+                        if (e.target.name === 'tracked-task') {
+                            localStorage.setItem(`trackedTask_${App.state.uniqueId}`, e.target.value);
+                            App.ui.renderTaskDetails(document.getElementById('task-details-container'), e.target.value);
+                        }
+                    });
+
+                    avatar.addEventListener('click', () => {
+                        const input = document.createElement('input');
+                        input.type = 'file'; input.accept = 'image/*';
+                        input.onchange = async e => {
+                            const file = e.target.files[0];
+                            if (file) {
+                                try { await App.db.save(App.state.uniqueId, file); App.ui.updateAvatar(file); }
+                                catch (err) { alert('保存头像失败！'); }
+                            }
+                        }; input.click();
+                    });
+
+                    window.addEventListener('beforeunload', () => {
+                        if (App.state.currentAvatarUrl) URL.revokeObjectURL(App.state.currentAvatarUrl);
+                    });
+                },
+
+                async init() {
+                    try {
+                        const rawVarData = await this.parsers.getVariableData();
+                        this.state.parsedData = this.parsers.parseData(rawVarData);
+                        if(this.state.parsedData.user.name) this.state.uniqueId = this.state.parsedData.user.name.replace(/\s/g, '');
+                        this.settings.load();
+                        this.bindEvents();
+                        await this.db.init();
+                        const avatarFile = await this.db.load(this.state.uniqueId);
+                        this.ui.updateAvatar(avatarFile);
+                        this.ui.updateAll();
+                    } catch(error) { console.error("Init Error:", error); }
+                }
+            };
+            App.init();
+        });
+    </script>
+</body>
