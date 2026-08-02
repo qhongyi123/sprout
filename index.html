@@ -986,8 +986,8 @@
                                 name: clean(key),
                                 mood: clean(val.心理),
                                 favorability: clean(val.好感度),
-                                situation: clean(val.当前状态),
-                                relationship: this.deriveRelation(clean(val.关系), val.好感度)
+                                situation: clean(val.动向),
+                                relationship: this.deriveRelation(clean(val.态度与关联), val.好感度)
                             });
                         });
                         return p;
