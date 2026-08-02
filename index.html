@@ -1,5 +1,5 @@
 <head>
-    <title>嫩芽</title>
+    <title>V6.9.7 Ultimate Performance + Helper Integration</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Noto+Serif+SC:wght@400;600&family=ZCOOL+XiaoWei&family=ZCOOL+KuaiLe&family=Share+Tech+Mono&family=Press+Start+2P&display=swap');
 
@@ -405,124 +405,12 @@
             .c-dp { border-right: none; border-left: 4px solid #ff7e5f; text-align: left;}
         }
     </style>
-</head>
-<body>
-<!-- disable-default-loading -->
-    <div id="status-card-wrapper" class="status-card perf-mode">
-        <div class="card-content">
-            <div id="ui-structure">
-                <div class="header">
-                    <div id="avatar" class="avatar user_avatar"><span id="avatar-placeholder" class="avatar-placeholder">更换头像</span></div>
-                    <div class="identity">
-                        <div id="char-name" class="name">...</div>
-                        <div class="tags-container" id="identity-tags-container">
-                             <div id="char-title" class="title">...</div>
-                             <!-- 动态插入 body state -->
-                        </div>
-                    </div>
-                </div>
-                <div id="vitals" class="vitals">
-                    <div class="progress-ring" id="power-level-ring"><div class="progress-ring-wrapper"><svg class="progress-ring__svg" viewBox="0 0 100 100"><circle class="progress-ring__track" stroke-width="10" fill="transparent" r="45" cx="50" cy="50"/><circle class="progress-ring__bar" stroke-width="10" fill="transparent" r="45" cx="50" cy="50"/></svg><div class="progress-ring__text"><span class="grade">--</span><span class="percent">--%</span></div></div><div class="progress-ring__label">引欲等级</div></div>
-                    <div class="progress-ring" id="craving-ring"><div class="progress-ring-wrapper"><svg class="progress-ring__svg" viewBox="0 0 100 100"><circle class="progress-ring__track" stroke-width="10" fill="transparent" r="45" cx="50" cy="50"/><circle class="progress-ring__bar" stroke-width="10" fill="transparent" r="45" cx="50" cy="50"/></svg><div class="progress-ring__text"><span class="percent">--%</span></div></div><div id="craving-label" class="progress-ring__label">...</div></div>
-                </div>
-
-                <div class="section">
-                     <div class="section-title">🧠 心理活动</div>
-                     <div id="psyche-bubble" class="psyche-bubble">...</div>
-                </div>
-
-                <div class="section">
-                    <div id="inventory-title" class="section-title collapsible collapsed">🎒 物品栏</div>
-                    <div id="inventory-wrapper" class="inventory-wrapper collapsed">
-                        <div id="inventory-grid" class="inventory-grid"></div>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <div class="section-title">📡 周围</div>
-                    <div id="surroundings-list" class="surroundings"></div>
-                </div>
-
-                <div id="task-panel" class="section"></div>
-            </div>
-        </div>
-
-        <div id="settings-toggle">🌸</div>
-        <div id="people-toggle">👥</div>
-    </div>
-
-    <!-- 设置面板 -->
-    <div id="settings-panel" class="modal-overlay">
-        <div class="modal-content">
-            <div class="setting-item" style="border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                <label for="perf-toggle" style="display:flex; justify-content:space-between; align-items:center;">
-                    <span>⚡ 性能优化 (关闭特效)</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="perf-toggle" checked>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </label>
-            </div>
-            <div class="setting-item"><label>面板宽度: <span class="value-display" id="width-value"></span></label><input type="range" id="width-slider" min="300" max="1000"></div>
-            <div class="setting-item"><label>区块间距: <span class="value-display" id="spacing-value"></span></label><input type="range" id="spacing-slider" min="0.5" max="6" step="0.1"></div>
-            <div class="setting-item"><label>字体大小: <span class="value-display" id="font-size-value"></span></label><input type="range" id="font-size-slider" min="12" max="30"></div>
-            <div class="setting-item">
-                <label>界面字体:</label>
-                <select id="font-selector">
-                    <option value="'Poppins', sans-serif">现代 (默认)</option>
-                    <option value="'Noto Serif SC', serif">典雅宋体</option>
-                    <option value="'ZCOOL XiaoWei', sans-serif">清秀手写</option>
-                    <option value="'ZCOOL KuaiLe', sans-serif">可爱圆体</option>
-                    <option value="'Share Tech Mono', monospace">复古科技</option>
-                    <option value="'Press Start 2P', cursive">像素游戏</option>
-                </select>
-            </div>
-            <div class="setting-item"><label>人物面板宽度: <span class="value-display" id="people-panel-width-value"></span></label><input type="range" id="people-panel-width-slider" min="300" max="1000"></div>
-            <hr style="border:none; border-top:1px dashed var(--color-border); margin: 1rem 0;">
-            <div class="setting-item"><label>头像尺寸: <span class="value-display" id="avatar-size-value"></span></label><input type="range" id="avatar-size-slider" min="40" max="500"></div>
-            <div class="setting-item"><label>战力环尺寸: <span class="value-display" id="power-ring-size-value"></span></label><input type="range" id="power-ring-size-slider" min="60" max="450"></div>
-            <div class="setting-item"><label>渴求环尺寸: <span class="value-display" id="craving-ring-size-value"></span></label><input type="range" id="craving-ring-size-slider" min="60" max="450"></div>
-            <div class="settings-actions">
-                <button id="toggle-layout-btn" class="settings-btn">切换布局</button>
-                <button id="reset-settings-btn" class="settings-btn">恢复默认</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 人物面板 -->
-    <div id="people-panel" class="modal-overlay">
-        <div class="modal-content">
-            <div id="people-table-content"></div>
-        </div>
-    </div>
-
-    <!-- DOC引欲详情面板 -->
-    <div id="doc-panel" class="modal-overlay">
-        <div class="modal-content">
-            <div id="doc-content"></div>
-        </div>
-    </div>
-
-    <!-- 圣母小助手：删除确认自定义弹窗 -->
-    <div id="delete-confirm-panel" class="modal-overlay">
-        <div class="helper-card-v2">
-            <div class="helper-header">
-                <span class="helper-icon">🕊️</span>
-                <span class="helper-title">圣母小助手</span>
-            </div>
-            <div id="delete-msg-content" class="helper-content"></div>
-            <div class="helper-actions">
-                <button id="confirm-delete-btn" class="helper-btn confirm">确认丢弃</button>
-                <button id="cancel-delete-btn" class="helper-btn cancel">算了</button>
-            </div>
-            <div class="helper-meta">悄悄丢掉的东西，{{user}}不会察觉哦...</div>
-        </div>
-    </div>
-
-    <script>
+    <script type="module">
         const requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
 
-        document.addEventListener('DOMContentLoaded', () => {
+        const mvuInit = async () => {
+            await waitGlobalInitialized('Mvu');
+
             const App = {
                 state: {
                     parsedData: { user: {}, tasks: [], people: [] },
@@ -777,7 +665,7 @@
                         Object.entries(inventoryData).forEach(([name, count]) => {
                             const item = document.createElement('div');
                             item.className = 'inventory-item';
-                            item.dataset.key = name; // 添加 data-key 用于定位删除动画
+                            item.dataset.key = name; /* 添加 data-key 用于定位删除动画 */
 
                             item.innerHTML = `
                                 <div class="inventory-name">${name}</div>
@@ -963,7 +851,7 @@
                     }
                 },
 
-                // 新增 Actions 处理删除逻辑
+                /* 新增 Actions 处理删除逻辑 */
                 actions: {
                     deleteInventoryItem(itemName) {
                         App.state.pendingDeleteItem = itemName;
@@ -975,46 +863,36 @@
                         const itemName = App.state.pendingDeleteItem;
                         if (!itemName) return;
 
-                        const payload = {
-                            user: {
-                                info: {
-                                    Inventory: { [itemName]: {} }
-                                }
-                            }
-                        };
-
                         try {
-                            if (window.eventEmit) {
-                                await window.eventEmit('era:deleteByObject', payload);
-                                // 删除后的视觉反馈
-                                const itemEl = document.querySelector(`.inventory-item[data-key="${itemName.replace(/"/g, '\\"')}"]`);
-                                if (itemEl) {
-                                    itemEl.style.transition = 'all 0.2s';
-                                    itemEl.style.opacity = '0';
-                                    itemEl.style.transform = 'scale(0.8)';
-                                    setTimeout(() => itemEl.remove(), 200);
+                            /* 使用 MvuZod API 直接删变量 */
+                            const data = Mvu.getMvuData({ type: 'message', message_id: getCurrentMessageId() });
+                            _.unset(data, `stat_data.user.info.Inventory.${itemName}`);
+                            await Mvu.replaceMvuData(data, { type: 'message', message_id: getCurrentMessageId() });
 
-                                    // 如果清空了，显示空消息
-                                    setTimeout(() => {
-                                        const container = App.elements.containers.inventory;
-                                        if (container && container.querySelectorAll('.inventory-item').length === 0) {
-                                            container.innerHTML = '<div style="color:var(--color-text-light);font-size:0.8rem;grid-column:1/-1;text-align:center;">暂无物品</div>';
-                                        }
-                                    }, 205);
-                                }
-                            } else {
-                                // 兼容性 Fallback：尝试使用 slash 命令模拟（虽然 Cute 版只用了 eventEmit，但为了防止报错保留少量逻辑）
-                                console.warn('eventEmit not available, trying triggerSlash for simulation...');
-                                if(typeof window.triggerSlash === 'function') {
-                                    const jsonString = JSON.stringify(payload, null, 2);
-                                    await window.triggerSlash(`/sendas name="Frontend Assistant" <聖母小助手>\n已删除"${itemName}"。\n<VariableDelete>\n${jsonString}\n</VariableDelete>\n</聖母小助手>`);
-                                     const itemEl = document.querySelector(`.inventory-item[data-key="${itemName.replace(/"/g, '\\"')}"]`);
-                                     if(itemEl) itemEl.remove();
-                                } else {
-                                    alert('无法连接到手账扩展系统(SillyTavern)');
-                                }
+                            /* 删除后的视觉反馈 */
+                            const itemEl = document.querySelector(`.inventory-item[data-key="${itemName.replace(/"/g, '\\"')}"]`);
+                            if (itemEl) {
+                                itemEl.style.transition = 'all 0.2s';
+                                itemEl.style.opacity = '0';
+                                itemEl.style.transform = 'scale(0.8)';
+                                setTimeout(() => itemEl.remove(), 200);
+
+                                /* 如果清空了，显示空消息 */
+                                setTimeout(() => {
+                                    const container = App.elements.containers.inventory;
+                                    if (container && container.querySelectorAll('.inventory-item').length === 0) {
+                                        container.innerHTML = '<div style="color:var(--color-text-light);font-size:0.8rem;grid-column:1/-1;text-align:center;">暂无物品</div>';
+                                    }
+                                }, 205);
                             }
-                        } catch (e) { alert('操作失败'); }
+                        } catch (e) {
+                            /* MvuZod API 不可用时尝试 toastr 报错 */
+                            if (typeof toastr !== 'undefined') {
+                                toastr.error('删除失败，请检查 MvuZod 环境');
+                            } else {
+                                alert('操作失败');
+                            }
+                        }
 
                         App.elements.deleteConfirm.panel.classList.remove('active');
                         App.state.pendingDeleteItem = null;
@@ -1027,13 +905,10 @@
                 },
 
                 parsers: {
-                    getVariableData: async () => {
+                    getVariableData() {
+                        /* 通过 getAllVariables() 获取 mvuzod 变量，路径需加 stat_data 前缀 */
                         try {
-                            if (typeof window.getVariables !== 'function') return null;
-                            const vars = await window.getVariables();
-                            let raw = vars['stat_data'];
-                            if (typeof raw === 'string') raw = JSON.parse(raw);
-                            return raw || {};
+                            return _.get(getAllVariables(), 'stat_data', {});
                         } catch (e) { return {}; }
                     },
 
@@ -1115,6 +990,13 @@
                     }
                 },
 
+                refreshData() {
+                    const rawVarData = this.parsers.getVariableData();
+                    this.state.parsedData = this.parsers.parseData(rawVarData);
+                    if(this.state.parsedData.user.name) this.state.uniqueId = this.state.parsedData.user.name.replace(/\s/g, '');
+                    this.ui.updateAll();
+                },
+
                 bindEvents() {
                     const { settings, avatar, containers, people, rings, doc, deleteConfirm } = App.elements;
 
@@ -1173,19 +1055,137 @@
 
                 async init() {
                     try {
-                        const rawVarData = await this.parsers.getVariableData();
-                        this.state.parsedData = this.parsers.parseData(rawVarData);
-                        if(this.state.parsedData.user.name) this.state.uniqueId = this.state.parsedData.user.name.replace(/\s/g, '');
+                        this.refreshData();
                         this.settings.load();
                         this.bindEvents();
                         await this.db.init();
                         const avatarFile = await this.db.load(this.state.uniqueId);
                         this.ui.updateAvatar(avatarFile);
-                        this.ui.updateAll();
+
+                        /* 监听 MvuZod 变量更新事件，自动刷新 UI */
+                        eventOn(Mvu.events.VARIABLE_UPDATE_ENDED, () => {
+                            this.refreshData();
+                        });
                     } catch(error) { console.error("Init Error:", error); }
                 }
             };
-            App.init();
-        });
+
+            await App.init();
+        };
+
+        $(errorCatched(mvuInit));
     </script>
+</head>
+<body>
+<!-- disable-default-loading -->
+    <div id="status-card-wrapper" class="status-card perf-mode">
+        <div class="card-content">
+            <div id="ui-structure">
+                <div class="header">
+                    <div id="avatar" class="avatar user_avatar"><span id="avatar-placeholder" class="avatar-placeholder">更换头像</span></div>
+                    <div class="identity">
+                        <div id="char-name" class="name">...</div>
+                        <div class="tags-container" id="identity-tags-container">
+                             <div id="char-title" class="title">...</div>
+                             <!-- 动态插入 body state -->
+                        </div>
+                    </div>
+                </div>
+                <div id="vitals" class="vitals">
+                    <div class="progress-ring" id="power-level-ring"><div class="progress-ring-wrapper"><svg class="progress-ring__svg" viewBox="0 0 100 100"><circle class="progress-ring__track" stroke-width="10" fill="transparent" r="45" cx="50" cy="50"/><circle class="progress-ring__bar" stroke-width="10" fill="transparent" r="45" cx="50" cy="50"/></svg><div class="progress-ring__text"><span class="grade">--</span><span class="percent">--%</span></div></div><div class="progress-ring__label">引欲等级</div></div>
+                    <div class="progress-ring" id="craving-ring"><div class="progress-ring-wrapper"><svg class="progress-ring__svg" viewBox="0 0 100 100"><circle class="progress-ring__track" stroke-width="10" fill="transparent" r="45" cx="50" cy="50"/><circle class="progress-ring__bar" stroke-width="10" fill="transparent" r="45" cx="50" cy="50"/></svg><div class="progress-ring__text"><span class="percent">--%</span></div></div><div id="craving-label" class="progress-ring__label">...</div></div>
+                </div>
+
+                <div class="section">
+                     <div class="section-title">🧠 心理活动</div>
+                     <div id="psyche-bubble" class="psyche-bubble">...</div>
+                </div>
+
+                <div class="section">
+                    <div id="inventory-title" class="section-title collapsible collapsed">🎒 物品栏</div>
+                    <div id="inventory-wrapper" class="inventory-wrapper collapsed">
+                        <div id="inventory-grid" class="inventory-grid"></div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">📡 周围</div>
+                    <div id="surroundings-list" class="surroundings"></div>
+                </div>
+
+                <div id="task-panel" class="section"></div>
+            </div>
+        </div>
+
+        <div id="settings-toggle">🌸</div>
+        <div id="people-toggle">👥</div>
+    </div>
+
+    <!-- 设置面板 -->
+    <div id="settings-panel" class="modal-overlay">
+        <div class="modal-content">
+            <div class="setting-item" style="border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <label for="perf-toggle" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>⚡ 性能优化 (关闭特效)</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="perf-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </label>
+            </div>
+            <div class="setting-item"><label>面板宽度: <span class="value-display" id="width-value"></span></label><input type="range" id="width-slider" min="300" max="1000"></div>
+            <div class="setting-item"><label>区块间距: <span class="value-display" id="spacing-value"></span></label><input type="range" id="spacing-slider" min="0.5" max="6" step="0.1"></div>
+            <div class="setting-item"><label>字体大小: <span class="value-display" id="font-size-value"></span></label><input type="range" id="font-size-slider" min="12" max="30"></div>
+            <div class="setting-item">
+                <label>界面字体:</label>
+                <select id="font-selector">
+                    <option value="'Poppins', sans-serif">现代 (默认)</option>
+                    <option value="'Noto Serif SC', serif">典雅宋体</option>
+                    <option value="'ZCOOL XiaoWei', sans-serif">清秀手写</option>
+                    <option value="'ZCOOL KuaiLe', sans-serif">可爱圆体</option>
+                    <option value="'Share Tech Mono', monospace">复古科技</option>
+                    <option value="'Press Start 2P', cursive">像素游戏</option>
+                </select>
+            </div>
+            <div class="setting-item"><label>人物面板宽度: <span class="value-display" id="people-panel-width-value"></span></label><input type="range" id="people-panel-width-slider" min="300" max="1000"></div>
+            <hr style="border:none; border-top:1px dashed var(--color-border); margin: 1rem 0;">
+            <div class="setting-item"><label>头像尺寸: <span class="value-display" id="avatar-size-value"></span></label><input type="range" id="avatar-size-slider" min="40" max="500"></div>
+            <div class="setting-item"><label>战力环尺寸: <span class="value-display" id="power-ring-size-value"></span></label><input type="range" id="power-ring-size-slider" min="60" max="450"></div>
+            <div class="setting-item"><label>渴求环尺寸: <span class="value-display" id="craving-ring-size-value"></span></label><input type="range" id="craving-ring-size-slider" min="60" max="450"></div>
+            <div class="settings-actions">
+                <button id="toggle-layout-btn" class="settings-btn">切换布局</button>
+                <button id="reset-settings-btn" class="settings-btn">恢复默认</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 人物面板 -->
+    <div id="people-panel" class="modal-overlay">
+        <div class="modal-content">
+            <div id="people-table-content"></div>
+        </div>
+    </div>
+
+    <!-- DOC引欲详情面板 -->
+    <div id="doc-panel" class="modal-overlay">
+        <div class="modal-content">
+            <div id="doc-content"></div>
+        </div>
+    </div>
+
+    <!-- 圣母小助手：删除确认自定义弹窗 -->
+    <div id="delete-confirm-panel" class="modal-overlay">
+        <div class="helper-card-v2">
+            <div class="helper-header">
+                <span class="helper-icon">🕊️</span>
+                <span class="helper-title">圣母小助手</span>
+            </div>
+            <div id="delete-msg-content" class="helper-content"></div>
+            <div class="helper-actions">
+                <button id="confirm-delete-btn" class="helper-btn confirm">确认丢弃</button>
+                <button id="cancel-delete-btn" class="helper-btn cancel">算了</button>
+            </div>
+            <div class="helper-meta">悄悄丢掉的东西，{{user}}不会察觉哦...</div>
+        </div>
+    </div>
 </body>
