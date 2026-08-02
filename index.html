@@ -919,6 +919,16 @@
                         return str.replace(/__DOT__/g, '.').replace(/__SPACE__/g, ' ');
                     },
 
+                    deriveRelation(relField, favorability) {
+                        if (relField && typeof relField === 'string' && relField !== '未知') return relField;
+                        const fav = parseInt(favorability) || 0;
+                        if (fav >= 60) return '亲密';
+                        if (fav >= 30) return '友好';
+                        if (fav >= 0) return '普通';
+                        if (fav >= -30) return '冷淡';
+                        return '敌对';
+                    },
+
                     parseData(data) {
                         const p = { user: {}, tasks: [], people: [] };
                         if (!data) return p;
@@ -977,7 +987,7 @@
                                 mood: clean(val.心理),
                                 favorability: clean(val.好感度),
                                 situation: clean(val.当前状态),
-                                relationship: clean(val.关系)
+                                relationship: this.deriveRelation(clean(val.关系), val.好感度)
                             });
                         });
                         return p;
