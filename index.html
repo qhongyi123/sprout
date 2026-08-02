@@ -103,6 +103,7 @@
         .identity .name { font-family: var(--font-tech); font-size: 1.5rem; font-weight: 700; color: var(--color-text-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
         .identity .tags-container { display: flex; flex-wrap: wrap; gap: 4px; }
         .identity .title { font-size: 0.85rem; color: var(--color-text-light); background: var(--bg-ring); padding: 2px 8px; border-radius: 5px; white-space: normal; line-height: 1.4; display: inline-block; }
+        .identity .fake-id { font-size: 0.8rem; color: #aaa; padding: 2px 8px; line-height: 1.4; display: inline-block; }
 
         /* 新增 Body State 样式 */
         .body-state-tag {
@@ -418,7 +419,7 @@
                         name: null, title: null, psyche: null,
                         cravingType: null, power: null, cravingVal: null,
                         surroundings: null, inventory: null,
-                        tasks: null, people: null, bodyState: null
+                        tasks: null, people: null, bodyState: null, fakeId: null
                     },
                     settings: {},
                     uniqueId: 'default',
@@ -436,6 +437,7 @@
                     text: {
                         name: document.getElementById('char-name'),
                         title: document.getElementById('char-title'),
+                        fakeId: document.getElementById('char-fake-id'),
                         cravingLabel: document.getElementById('craving-label'),
                         psyche: document.getElementById('psyche-bubble'),
                         tagContainer: document.getElementById('identity-tags-container')
@@ -822,6 +824,17 @@
                                 prev.title = d.user.identity;
                             }
 
+                            if (d.user.fakeIdentity !== prev.fakeId) {
+                                const fake = d.user.fakeIdentity;
+                                if (fake && fake !== '无') {
+                                    text.fakeId.textContent = `(${fake})`;
+                                    text.fakeId.style.display = 'inline-block';
+                                } else {
+                                    text.fakeId.style.display = 'none';
+                                }
+                                prev.fakeId = d.user.fakeIdentity;
+                            }
+
                             if (d.user.bodyState !== prev.bodyState) {
                                 this.renderBodyState(d.user.bodyState);
                                 prev.bodyState = d.user.bodyState;
@@ -954,6 +967,7 @@
                         p.user = {
                             name: clean(info.name),
                             identity: clean(info.identity),
+                            fakeIdentity: clean(info.fake_identity),
                             bodyState: clean(info.body_state),
                             surroundings: clean(info.surroundings),
                             psyche: clean(info.Psychological_description),
@@ -1091,6 +1105,7 @@
                         <div id="char-name" class="name">...</div>
                         <div class="tags-container" id="identity-tags-container">
                              <div id="char-title" class="title">...</div>
+                             <div id="char-fake-id" class="fake-id" style="display:none"></div>
                              <!-- 动态插入 body state -->
                         </div>
                     </div>
