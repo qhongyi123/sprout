@@ -782,7 +782,7 @@
                             <div class="chaos-container">
                                 <div class="chaos-header"><h2>DOC PROTOCOL</h2><div class="chaos-badge"><span>${doc.type || '未知'}引欲人 [ Lv.${doc.level || '?'} ]</span></div></div>
                                 <div class="chaos-block c-energy"><span class="c-label">ENERGY: ${doc.energy.type || 'N/A'}</span><span class="c-value">${doc.energy.available || 0} <span style="font-size:0.8em;color:#aaa">/ ${doc.energy.cap || 0}</span></span></div>
-                                <div class="chaos-block c-dp"><span class="c-label">DP CORE: ${doc.dp.type || '未知'}</span><span class="c-value" style="color:${doc.dp.status ? 'var(--color-primary)' : '#aaa'}">${doc.dp.status ? '激活' : '休眠'}</span></div>
+                                <div class="chaos-block c-dp"><span class="c-label">DP CORE: ${doc.dp.type || '未知'}</span><span class="c-value">欲宫内已寄存 ${doList.length} 个欲望体</span></div>
                                 <div class="c-list"><span class="c-label" style="padding-left:10px">/// DO_MODULES</span>${doListHTML || '<span style="padding-left:10px;color:#aaa">NO MODULES DETECTED</span>'}</div>
                             </div>
                         `;
