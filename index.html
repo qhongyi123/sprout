@@ -878,7 +878,7 @@
                         try {
                             /* 使用 MvuZod API 直接删变量 */
                             const data = Mvu.getMvuData({ type: 'message', message_id: getCurrentMessageId() });
-                            _.unset(data, `stat_data.user.info.Inventory.${itemName}`);
+                            _.unset(data, `stat_data.user.Inventory.${itemName}`);
                             await Mvu.replaceMvuData(data, { type: 'message', message_id: getCurrentMessageId() });
 
                             /* 删除后的视觉反馈 */
@@ -946,8 +946,7 @@
                         const clean = this.cleanStr;
 
                         const u = data.user || {};
-                        const info = u.info || {};
-                        const doc = info.DOC || {};
+                        const doc = u.DOC || {};
                         const dp = doc.DP || {};
 
                         const doList = [];
@@ -962,13 +961,13 @@
                         }
 
                         p.user = {
-                            name: clean(info.name),
-                            identity: clean(info.identity),
-                            fakeIdentity: clean(info.fake_identity),
-                            bodyState: clean(info.body_state),
-                            surroundings: clean(info.surroundings),
-                            psyche: clean(info.Psychological_description),
-                            inventory: info.Inventory || {},
+                            name: clean(u.name),
+                            identity: clean(u.identity),
+                            fakeIdentity: clean(u.fake_identity),
+                            bodyState: clean(u.body_state),
+                            surroundings: clean(u.surroundings),
+                            psyche: clean(u.Psychological_description),
+                            inventory: u.Inventory || {},
                             powerGrade: doc.level || '?',
                             powerPercent: parseInt(doc.Level_Percentage || 0),
                             cravingType: doc.type,
