@@ -1019,7 +1019,16 @@
 
                     settings.toggle.addEventListener('click', () => toggleModal(settings.panel));
                     people.toggle.addEventListener('click', () => toggleModal(people.panel));
-                    rings.power.addEventListener('click', () => { App.ui.renderDocPanel(); toggleModal(doc.panel); });
+                    rings.power.addEventListener('click', () => {
+                        try {
+                            if (!App.state.parsedData.user.doc || !App.state.parsedData.user.doc.status) {
+                                toastr && toastr.info('尚未引欲');
+                                return;
+                            }
+                            App.ui.renderDocPanel();
+                            toggleModal(doc.panel);
+                        } catch(e) { console.error('DOC Panel Error:', e); }
+                    });
 
                     [settings.panel, people.panel, doc.panel, deleteConfirm.panel].forEach(panel => {
                         panel.addEventListener('click', (e) => {
