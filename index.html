@@ -416,7 +416,7 @@
                         name: null, title: null, psyche: null,
                         cravingType: null, power: null, cravingVal: null,
                         surroundings: null, inventory: null,
-                        tasks: null, people: null, bodyState: null, fakeId: null
+                        tasks: null, people: null, bodyState: null, fakeId: null, docStatus: null
                     },
                     settings: {},
                     uniqueId: 'default',
@@ -838,6 +838,13 @@
                             }
 
                             if (d.user.psyche !== prev.psyche) { text.psyche.textContent = d.user.psyche || '...'; prev.psyche = d.user.psyche; }
+
+                            if (d.user.doc.status !== prev.docStatus) {
+                                const hasDoc = d.user.doc.status;
+                                rings.power.style.display = hasDoc ? '' : 'none';
+                                rings.craving.style.display = hasDoc ? '' : 'none';
+                                prev.docStatus = d.user.doc.status;
+                            }
 
                             const ringChanged = (d.user.powerGrade !== prev.power) || (d.user.powerPercent !== prev.powerPct) || (d.user.cravingVal !== prev.cravingVal) || (d.user.cravingType !== prev.cravingType);
                             if (ringChanged) {
