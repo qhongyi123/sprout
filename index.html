@@ -814,7 +814,7 @@
 
                         if (!d || !d.user) return;
 
-                        const isUninitialized = d.user.name === '未知' && d.user.identity === '未知';
+                        const isUninitialized = (!d.user.name || d.user.name === '未知') && (!d.user.identity || d.user.identity === '未知');
                         if (isUninitialized) {
                             App.elements.welcomeMessage.style.display = '';
                             App.elements.statusCard.style.display = 'none';
@@ -1118,7 +1118,7 @@
 <body>
 <!-- disable-default-loading -->
     <div id="welcome-message" style="display:none;text-align:center;padding:2rem;color:var(--color-text-light);font-size:0.95rem;line-height:1.8;">
-        欢迎游玩花园<br>请在上方开局前端进行开局<br>若你在游玩过程中看到本字样<br>说明检测到变量更新出错<br>请重roll本层对话
+        欢迎游玩花园<br>请在上方开局前端进行开局<br>若你在游玩过程中看到本字样<br>请重roll本层对话
     </div>
     <div id="status-card-wrapper" class="status-card perf-mode" style="display:none">
         <div class="card-content">
