@@ -616,6 +616,11 @@
                 },
 
                 ui: {
+                    toggleCardVisibility() {
+                        const name = App.state.parsedData.user.name;
+                        App.elements.statusCard.style.display = (name && name !== '未知') ? '' : 'none';
+                    },
+
                     updateAvatar(file) {
                         if (App.state.currentAvatarUrl) { URL.revokeObjectURL(App.state.currentAvatarUrl); App.state.currentAvatarUrl = null; }
                         if (file) {
@@ -1015,6 +1020,7 @@
                     const rawVarData = this.parsers.getVariableData();
                     this.state.parsedData = this.parsers.parseData(rawVarData);
                     if(this.state.parsedData.user.name) this.state.uniqueId = this.state.parsedData.user.name.replace(/\s/g, '');
+                    this.ui.toggleCardVisibility();
                     this.ui.updateAll();
                 },
 
