@@ -1085,8 +1085,14 @@
                         const avatarFile = await this.db.load(this.state.uniqueId);
                         this.ui.updateAvatar(avatarFile);
 
+                        /* 开局无数据时隐藏，避免空卡片占位 */
+                        if (!this.state.parsedData.user.name || this.state.parsedData.user.name === '未知') {
+                            this.elements.body.style.display = 'none';
+                        }
+
                         /* 监听 MvuZod 变量更新事件，自动刷新 UI */
                         eventOn(Mvu.events.VARIABLE_UPDATE_ENDED, () => {
+                            this.elements.body.style.display = '';
                             this.refreshData();
                         });
                     } catch(error) { console.error("Init Error:", error); }
