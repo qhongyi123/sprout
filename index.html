@@ -416,7 +416,7 @@
                         name: null, title: null, psyche: null,
                         cravingType: null, power: null, cravingVal: null,
                         surroundings: null, inventory: null,
-                        tasks: null, people: null, bodyState: null, fakeId: null, docStatus: null
+                        tasks: null, people: null, bodyState: null, fakeId: null
                     },
                     settings: {},
                     uniqueId: 'default',
@@ -616,19 +616,6 @@
                 },
 
                 ui: {
-                    toggleCardVisibility() {
-                        const name = App.state.parsedData.user.name;
-                        if (name && name !== '未知') {
-                            App.elements.statusCard.style.display = '';
-                            App.elements.body.style.background = '';
-                            App.elements.body.style.minHeight = '';
-                        } else {
-                            App.elements.statusCard.style.display = 'none';
-                            App.elements.body.style.background = 'transparent';
-                            App.elements.body.style.minHeight = '0';
-                        }
-                    },
-
                     updateAvatar(file) {
                         if (App.state.currentAvatarUrl) { URL.revokeObjectURL(App.state.currentAvatarUrl); App.state.currentAvatarUrl = null; }
                         if (file) {
@@ -852,13 +839,6 @@
 
                             if (d.user.psyche !== prev.psyche) { text.psyche.textContent = d.user.psyche || '...'; prev.psyche = d.user.psyche; }
 
-                            if (d.user.doc.status !== prev.docStatus) {
-                                const hasDoc = d.user.doc.status;
-                                rings.power.style.display = hasDoc ? '' : 'none';
-                                rings.craving.style.display = hasDoc ? '' : 'none';
-                                prev.docStatus = d.user.doc.status;
-                            }
-
                             const ringChanged = (d.user.powerGrade !== prev.power) || (d.user.powerPercent !== prev.powerPct) || (d.user.cravingVal !== prev.cravingVal) || (d.user.cravingType !== prev.cravingType);
                             if (ringChanged) {
                                 if (d.user.cravingType === 'ET') text.cravingLabel.textContent = 'LSP渴求';
@@ -1028,7 +1008,6 @@
                     const rawVarData = this.parsers.getVariableData();
                     this.state.parsedData = this.parsers.parseData(rawVarData);
                     if(this.state.parsedData.user.name) this.state.uniqueId = this.state.parsedData.user.name.replace(/\s/g, '');
-                    this.ui.toggleCardVisibility();
                     this.ui.updateAll();
                 },
 
