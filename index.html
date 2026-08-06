@@ -416,7 +416,7 @@
                         name: null, title: null, psyche: null,
                         cravingType: null, power: null, cravingVal: null,
                         surroundings: null, inventory: null,
-                        tasks: null, people: null, bodyState: null, fakeId: null
+                        tasks: null, people: null, bodyState: null, fakeId: null, docStatus: null
                     },
                     settings: {},
                     uniqueId: 'default',
@@ -429,7 +429,6 @@
                     root: document.documentElement,
                     body: document.body,
                     statusCard: document.getElementById('status-card-wrapper'),
-                    welcomeMessage: document.getElementById('welcome-message'),
                     avatar: document.getElementById('avatar'),
                     avatarPlaceholder: document.getElementById('avatar-placeholder'),
                     text: {
@@ -814,15 +813,6 @@
 
                         if (!d || !d.user) return;
 
-                        const isUninitialized = (!d.user.name || d.user.name === '未知') && (!d.user.identity || d.user.identity === '未知');
-                        if (isUninitialized) {
-                            App.elements.welcomeMessage.style.display = '';
-                            App.elements.statusCard.style.display = 'none';
-                            return;
-                        }
-                        App.elements.welcomeMessage.style.display = 'none';
-                        App.elements.statusCard.style.display = '';
-
                         requestAnimationFrame(() => {
                             if (d.user.name !== prev.name) { text.name.textContent = d.user.name || 'Unknown'; prev.name = d.user.name; }
 
@@ -848,6 +838,13 @@
                             }
 
                             if (d.user.psyche !== prev.psyche) { text.psyche.textContent = d.user.psyche || '...'; prev.psyche = d.user.psyche; }
+
+                            if (d.user.doc.status !== prev.docStatus) {
+                                const hasDoc = d.user.doc.status;
+                                rings.power.style.display = hasDoc ? '' : 'none';
+                                rings.craving.style.display = hasDoc ? '' : 'none';
+                                prev.docStatus = d.user.doc.status;
+                            }
 
                             const ringChanged = (d.user.powerGrade !== prev.power) || (d.user.powerPercent !== prev.powerPct) || (d.user.cravingVal !== prev.cravingVal) || (d.user.cravingType !== prev.cravingType);
                             if (ringChanged) {
@@ -1095,14 +1092,8 @@
                         const avatarFile = await this.db.load(this.state.uniqueId);
                         this.ui.updateAvatar(avatarFile);
 
-                        /* 开局无数据时隐藏，避免空卡片占位 */
-                        if (!this.state.parsedData.user.name || this.state.parsedData.user.name === '未知') {
-                            this.elements.body.style.display = 'none';
-                        }
-
                         /* 监听 MvuZod 变量更新事件，自动刷新 UI */
                         eventOn(Mvu.events.VARIABLE_UPDATE_ENDED, () => {
-                            this.elements.body.style.display = '';
                             this.refreshData();
                         });
                     } catch(error) { console.error("Init Error:", error); }
@@ -1117,10 +1108,7 @@
 </head>
 <body>
 <!-- disable-default-loading -->
-    <div id="welcome-message" style="display:none;text-align:center;padding:2rem;color:var(--color-text-light);font-size:0.95rem;line-height:1.8;">
-        欢迎游玩花园<br>请在上方开局前端进行开局<br>若你在游玩过程中看到本字样<br>请重roll本层对话
-    </div>
-    <div id="status-card-wrapper" class="status-card perf-mode" style="display:none">
+    <div id="status-card-wrapper" class="status-card perf-mode">
         <div class="card-content">
             <div id="ui-structure">
                 <div class="header">
