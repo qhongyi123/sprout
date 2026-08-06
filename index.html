@@ -618,7 +618,15 @@
                 ui: {
                     toggleCardVisibility() {
                         const name = App.state.parsedData.user.name;
-                        App.elements.statusCard.style.display = (name && name !== '未知') ? '' : 'none';
+                        if (name && name !== '未知') {
+                            App.elements.statusCard.style.display = '';
+                            App.elements.body.style.background = '';
+                            App.elements.body.style.minHeight = '';
+                        } else {
+                            App.elements.statusCard.style.display = 'none';
+                            App.elements.body.style.background = 'transparent';
+                            App.elements.body.style.minHeight = '0';
+                        }
                     },
 
                     updateAvatar(file) {
